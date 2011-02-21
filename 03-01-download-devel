@@ -1,0 +1,15 @@
+#!/bin/bash
+self=$0
+bin=${self%/*}
+. $bin/00-00-init
+set -o verbose
+
+# ------------------------------------------------------------------ #
+# Example 3-1: Download devel
+# ------------------------------------------------------------------ #
+
+drush @dev pm-download devel -y
+drush @dev pm-enable devel -y
+drush @dev help --filter=devel
+
+# ------------------------------------------------------------------ #

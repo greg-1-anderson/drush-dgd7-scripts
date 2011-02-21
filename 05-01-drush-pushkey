@@ -1,0 +1,23 @@
+#!/bin/bash
+self=$0
+bin=${self%/*}
+. $bin/00-00-init
+set -o verbose
+
+cat << __EOF__ >> $HOME/.drush/drushrc.php
+# We will point our identity file t othe one that pushkey will create in $HOME/.ssh.
+# 00-00-init re-assigns the $HOME variable, but ssh will continue to look at the
+# original home directory unless we do this.
+\$options['ssh-options'] = '-o PasswordAuthentication=no -i $HOME/.ssh/id_rsa';
+__EOF__
+
+# ------------------------------------------------------------------ #
+# Example 5-1: Download drush_extras and use pushkey
+# ------------------------------------------------------------------ #
+
+
+drush pm-download drush_extras -y
+drush pushkey @live
+drush @live core-status
+
+# ------------------------------------------------------------------ #

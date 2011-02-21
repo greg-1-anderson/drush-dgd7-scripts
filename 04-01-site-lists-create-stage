@@ -1,0 +1,41 @@
+#!/bin/bash
+self=$0
+bin=${self%/*}
+. $bin/00-00-init
+set -o verbose
+
+# Setup: create the 'stage' site
+
+mkdir dgd7-stage
+cd dgd7-stage
+drush dl drupal-7.x --drupal-project-rename=web -y
+cd web
+cp sites/default/default.settings.php sites/default/settings.php
+chmod -R o+w sites/default
+drush site-install --db-url=$STAGE_DBURL --account-name=admin --account-pass=secretsecret -y
+
+cat << __EOF__ >> $HOME/.drush/aliases.drushrc.php
+
+\$aliases['stage'] = array(
+  'root' => '$DIR/dgd7-stage/web',
+  'uri' => 'http://stage.dgd7.org',
+);
+
+__EOF__
+
+
+# ------------------------------------------------------------------ #
+# Example 4-1: Site alias lists
+# ------------------------------------------------------------------ #
+
+cat << __EOF__ >> $HOME/.drush/aliases.drushrc.php
+
+\$aliases['all-scratch'] = array(
+  'site-list' => array('@dev', '@stage'),
+);
+
+__EOF__
+
+drush @all-scratch core-status "Drupal Version" -y
+
+# ------------------------------------------------------------------ #

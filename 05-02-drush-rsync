@@ -1,0 +1,17 @@
+#!/bin/bash
+self=$0
+bin=${self%/*}
+. $bin/00-00-init
+set -o verbose
+
+# ------------------------------------------------------------------ #
+# Example 5-2: drush rsync
+# ------------------------------------------------------------------ #
+
+drush rsync @live @dev --include-conf -s
+# n.b. we leave off the --include-conf because our
+# simulated site already has a valid settings.php
+# (but we want --include-conf in print)
+drush rsync @live @dev -y # --include-conf
+
+# ------------------------------------------------------------------ #

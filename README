@@ -1,0 +1,22 @@
+drush-dgd7-scripts
+==================
+
+Before you can do anything with these scripts, you must open
+the file 00-00-init and customize it for your system.  See
+comments in the script.
+
+The numbered scripts, nn-nn-script-name, are the different
+scripts used as examples in the Drush chapter of the book
+Definitive Guide to Drupal 7.  You can run these, but you
+have to run them in sequence, because some scripts depend on
+changes made to the site by the previous script.  While this
+is not very good practice for unit tests, this is the way
+the examples in the chapter work, ergo these scripts behave
+the same way.
+
+If you want to run all of the scripts in sequence, you can
+simply run the 'run-all' script.
+
+If you are looking for unit tests for drush, try:
+
+	https://github.com/Cyrve/Drush-PHPUnit

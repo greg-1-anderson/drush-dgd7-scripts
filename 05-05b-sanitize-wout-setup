@@ -1,0 +1,14 @@
+#!/bin/bash
+self=$0
+bin=${self%/*}
+. $bin/00-00-init
+set -o verbose
+
+# ------------------------------------------------------------------ #
+# Example 5-5b: Sanitize to a test site (same as 5-5 w/out setup)
+# ------------------------------------------------------------------ #
+
+drush site-alias @dgd7.test
+drush sql-sync @dev @test --sanitize -y
+
+# ------------------------------------------------------------------ #

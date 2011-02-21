@@ -1,0 +1,13 @@
+#!/bin/bash
+self=$0
+bin=${self%/*}
+. $bin/00-00-init
+set -o verbose
+
+# ------------------------------------------------------------------ #
+# Example 1-6: Selecting a site with a site specification
+# ------------------------------------------------------------------ #
+
+drush $DIR/dgd7/web#dgd7.org core-status "Site URI"
+
+# ------------------------------------------------------------------ #

@@ -1,0 +1,15 @@
+#!/bin/bash
+self=$0
+bin=${self%/*}
+. $bin/00-00-init
+set -o verbose
+
+# ------------------------------------------------------------------ #
+# Example 2-1: Download an old version of a module and enable it
+# ------------------------------------------------------------------ #
+
+drush @dev pm-releases logintoboggan --all -y
+drush @dev pm-download logintoboggan --select --all --choice=4
+drush @dev pm-enable logintoboggan -y
+
+# ------------------------------------------------------------------ #

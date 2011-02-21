@@ -1,0 +1,33 @@
+#!/bin/bash
+self=$0
+bin=${self%/*}
+. $bin/00-00-init
+set -o verbose
+
+# Setup: create a 'test' site
+
+mkdir dgd7-test
+cd dgd7-test
+drush dl drupal-7.x --drupal-project-rename=web -y
+cd web
+cp sites/default/default.settings.php sites/default/settings.php
+chmod -R o+w sites/default
+drush site-install --db-url=$TEST_DBURL --account-name=admin --account-pass=secretsecret -y
+
+# ------------------------------------------------------------------ #
+# Example 5-5: Sanitize to a test site
+# ------------------------------------------------------------------ #
+
+cat << __EOF__ >> $HOME/.drush/dgd7.aliases.drushrc.php
+
+\$aliases['test'] = array(
+  'root' => '$DIR/dgd7-test/web',
+  'uri' => 'http://test.dgd7.org',
+);
+
+__EOF__
+
+drush site-alias @dgd7.test
+drush sql-sync @dev @test --sanitize -y
+
+# ------------------------------------------------------------------ #

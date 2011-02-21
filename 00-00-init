@@ -1,0 +1,37 @@
+#!/bin/bash
+
+#
+# There are only a few things that need to be done
+# in this file.
+#
+# 1. Customize the variable MYSQL_BASE or PGSQL_BASE
+#    as appropriate.  The user specified must have DROP
+#    and CREATE priviledges.
+#
+# 2. If you are using MYSQL, then replace the PGSQL_BASE
+#    with MYSQL_BASE in the various database variables below.
+#
+# 3. If you want to use the drush in your $PATH instead of
+#    the drush downloaded by this script, then comment out
+#    the line "PATH=$DIR/drush:$PATH" below
+#
+#
+MYSQL_BASE=mysql://user:pass@localhost
+PGSQL_BASE=pgsql://www-data:pass@localhost
+
+DEV_DBURL=$PGSQL_BASE/dgd7devdb
+STAGE_DBURL=$PGSQL_BASE/dgd7stagedb
+LIVE_DBURL=$PGSQL_BASE/dgd7livedb
+TEST_DBURL=$PGSQL_BASE/dgd7testdb
+
+D6_DBURL=$PGSQL_BASE/dgd7d6db
+
+
+DIR=/home/ga/work/dgd7/install
+DRUSH=$DIR/drush
+HOME=$DIR/home
+mkdir -p $HOME
+
+PATH=$DIR/drush:$PATH
+
+cd $DIR

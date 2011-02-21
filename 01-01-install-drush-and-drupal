@@ -1,0 +1,22 @@
+#!/bin/bash
+self=$0
+bin=${self%/*}
+. $bin/00-00-init
+wd=`pwd`
+set -o verbose
+
+# ------------------------------------------------------------------ #
+# Example 1-1: Install Drush and Drupal
+# ------------------------------------------------------------------ #
+wget http://ftp.drupal.org/files/projects/drush-All-versions-4.1.tar.gz
+tar xzf drush-All-versions-4.1.tar.gz
+export PATH=$DIR/drush:$PATH
+mkdir dgd7
+cd dgd7
+drush dl drupal --drupal-project-rename=web -y
+cd web
+cp sites/default/default.settings.php sites/default/settings.php
+chmod -R o+w sites/default
+drush site-install --db-url=$DEV_DBURL --account-name=admin --account-pass=secretsecret -y
+
+# ------------------------------------------------------------------ #

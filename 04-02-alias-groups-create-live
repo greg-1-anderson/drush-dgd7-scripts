@@ -1,0 +1,43 @@
+#!/bin/bash
+self=$0
+bin=${self%/*}
+. $bin/00-00-init
+set -o verbose
+
+# Setup: create the 'live' site
+
+mkdir dgd7-live
+cd dgd7-live
+drush dl drupal-7.x --drupal-project-rename=web -y
+cd web
+cp sites/default/default.settings.php sites/default/settings.php
+chmod -R o+w sites/default
+drush site-install --db-url=$LIVE_DBURL --account-name=admin --account-pass=secretsecret -y
+
+# ------------------------------------------------------------------ #
+# Example 4-2: Alias groups
+# ------------------------------------------------------------------ #
+
+cat << __EOF__ > $HOME/.drush/dgd7.aliases.drushrc.php
+<?php
+
+\$aliases['dev'] = array(
+  'root' => '$DIR/dgd7/web',
+  'uri' => 'http://dgd7.org',
+);
+\$aliases['stage'] = array(
+  'root' => '$DIR/dgd7-stage/web',
+  'uri' => 'http://stage.dgd7.org',
+);
+\$aliases['live'] = array(
+  'remote-host' => 'localhost.localdomain',
+  'remote-user' => 'ga',
+  'root' => '$DIR/dgd7-live/web',
+  'uri' => 'http://live.dgd7.org',
+);
+
+__EOF__
+
+drush site-alias @dgd7
+
+# ------------------------------------------------------------------ #

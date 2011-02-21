@@ -1,0 +1,22 @@
+#!/bin/bash
+
+self=$0
+bin=${self%/*}
+
+#
+# Find all of the numbered scripts, skipping the 'b' variants and 00-00-init,
+# and put them in order.
+#
+all=`ls -1 | grep '[0-9][0-9]-[0-9][0-9]-' | grep -v '00-00' | sort`
+
+#
+# Iterate and run
+#
+for s in $all ; do
+	echo "###"
+	echo "### $s"
+	echo "###"
+	echo
+	$bin/$s
+	echo
+done

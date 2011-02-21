@@ -1,0 +1,14 @@
+#!/bin/bash
+self=$0
+bin=${self%/*}
+. $bin/00-00-init
+set -o verbose
+
+# ------------------------------------------------------------------ #
+# Example 5-4: drush sql-sync with --structure-table-key
+# ------------------------------------------------------------------ #
+
+drush sql-sync @live @dev --structure-tables-key=common -s
+drush sql-sync @live @dev --structure-tables-key=common -y
+
+# ------------------------------------------------------------------ #

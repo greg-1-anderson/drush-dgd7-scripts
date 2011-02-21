@@ -1,0 +1,50 @@
+#!/bin/bash
+self=$0
+bin=${self%/*}
+. $bin/00-00-init
+wd=`pwd`
+set -o verbose
+
+# ------------------------------------------------------------------ #
+# Example 1-1: Install Drush and Drupal
+# ------------------------------------------------------------------ #
+
+# Install a d6 site to upgrade
+
+rm -rf d6-site-to-upgrade
+mkdir d6-site-to-upgrade
+cd d6-site-to-upgrade
+drush dl drupal-6.20 --drupal-project-rename=web -y
+cd web
+drush site-install --db-url=$D6_DBURL --account-name=admin --account-pass=secretsecret -y
+
+# Show status to make sure all went okay with the install, then add some non-core modules
+
+drush status
+drush dl views pathauto token seven -y
+drush en views views_ui pathauto seven -y
+drush variable-set admin_theme "seven" --always-set -y
+
+drush pm-list --status=enabled --no-core
+
+# Define an alias to use with site-upgrade
+
+rm -rf $DIR/d7upgraded/web
+mkdir -p $DIR/d7upgraded
+cat << __EOF__ >> $HOME/.drush/aliases.drushrc.php
+
+\$aliases['d7upgrade'] = array(
+  'root' => '$DIR/d7upgraded/web',
+  'uri' => 'http://d7upgraded.net',
+);
+
+__EOF__
+
+# Let's upgrade our d6 site to d7 now
+
+drush site-upgrade @d7upgrade -y
+
+drush @d7upgrade status
+drush @d7upgrade pm-list --status=enabled
+
+# ------------------------------------------------------------------ #

@@ -1,0 +1,35 @@
+#!/bin/bash
+self=$0
+bin=${self%/*}
+. $bin/00-00-init
+wd=`pwd`
+set -o verbose
+
+# ------------------------------------------------------------------ #
+# Example 1-1: Install Drush and Drupal
+# ------------------------------------------------------------------ #
+
+cd d6-site-to-upgrade/web
+
+# Define an alias to use with site-upgrade
+
+cat << __EOF__ >> $HOME/.drush/aliases.drushrc.php
+
+\$aliases['d7upgrade'] = array(
+  'root' => '$DIR/d7upgraded/web',
+  'uri' => 'http://d7upgraded.net',
+);
+
+__EOF__
+
+drush @d7upgrade pm-enable token
+drush @d7upgrade updatedb
+
+# Let's upgrade our d6 site to d7 now
+
+#drush site-upgrade @d7upgrade
+
+#drush @d7upgrade status
+#drush @d7upgrade pm-list --status=enabled
+
+# ------------------------------------------------------------------ #
