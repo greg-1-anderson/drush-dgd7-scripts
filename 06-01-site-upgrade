@@ -6,7 +6,7 @@ wd=`pwd`
 set -o verbose
 
 # ------------------------------------------------------------------ #
-# Example 1-1: Install Drush and Drupal
+# Example 6-1: site-upgrade
 # ------------------------------------------------------------------ #
 
 # Install a d6 site to upgrade
@@ -21,8 +21,8 @@ drush site-install --db-url=$D6_DBURL --account-name=admin --account-pass=secret
 # Show status to make sure all went okay with the install, then add some non-core modules
 
 drush status
-drush dl views pathauto token seven -y
-drush en views views_ui pathauto seven -y
+drush dl views pathauto token cck filefield seven -y
+drush en views views_ui pathauto content filefield seven -y
 drush variable-set admin_theme "seven" --always-set -y
 
 drush pm-list --status=enabled --no-core
@@ -46,5 +46,6 @@ drush site-upgrade @d7upgrade -y
 
 drush @d7upgrade status
 drush @d7upgrade pm-list --status=enabled
+drush @d7upgrade sqlq 'select name,mail from users;'
 
 # ------------------------------------------------------------------ #

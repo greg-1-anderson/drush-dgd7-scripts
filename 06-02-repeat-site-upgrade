@@ -1,0 +1,29 @@
+#!/bin/bash
+self=$0
+bin=${self%/*}
+. $bin/00-00-init
+wd=`pwd`
+set -o verbose
+
+# ------------------------------------------------------------------ #
+# Example 1-1: repeate site-upgrade
+# ------------------------------------------------------------------ #
+
+# Install a d6 site to upgrade
+
+cd d6-site-to-upgrade/web
+
+# Let's add a user to our d6 site to simulate some activity
+
+drush status
+drush user-create newuser --password=password --mail=newuser@d6sitetoupgrade.com
+
+# Now that we've modified our d6 site, let's use site-upgrade to re-import the database
+
+drush @d7upgrade sqlq 'select name,mail from users;'
+
+drush site-upgrade @d7upgrade --reuse -y
+
+drush @d7upgrade sqlq 'select name,mail from users;'
+
+# ------------------------------------------------------------------ #
